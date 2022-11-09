@@ -52,7 +52,6 @@ mapworld <- countryExData %>%
   full_join(doctors_2020_map, by = c("ISO3V10" = "LOCATION"))
 
 #World Map
-mapCountryData()
 data("mapworld",envir=environment(),package="rworldmap")
 sPDF <- joinCountryData2Map(mapworld
                             , joinCode = "ISO3"
@@ -64,7 +63,6 @@ mapCountryData(sPDF
                 , missingCountryCol='white') 
 
 #Europe Map
-mapCountryData()
 data("mapworld",envir=environment(),package="rworldmap")
 sPDF <- joinCountryData2Map(mapworld
                             , joinCode = "ISO3"
