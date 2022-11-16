@@ -82,23 +82,43 @@ HIP_OECD_data <- Orig_healthutil_raw %>%
 joinedfortablehip <-
   full_join(HIP_OECD_data, doctors_2020_map, by = c("COU" = "LOCATION"))
 
-joinedfortablehip %>% 
-  dplyr::arrange(-Value) %>% 
+```{r}
+agg_tbl <- joinedfortablehip %>% group_by(Country) %>% 
+  summarise(mean_Value=mean(Value),
+            .groups = 'drop')
+```
+
+```{r}
+agg_tbl2 <- joinedfortablehip %>% group_by(Country) %>% 
+  summarise(mean_Doctors_and_Graduates_per_1000=mean(Doctors_and_Graduates_per_1000),
+            .groups = 'drop')
+```
+
+```{r}
+joinedfortablehip2 <-
+fulljoin(agg_tbl)
+```
+
+```{r}
+joinedfortablehip22 <- 
+  full_join(agg_tbl, agg_tbl2, by = c("Country"))
+```
+
+```{r}
+joinedfortablehip22 %>% 
+  dplyr::arrange(-mean_Value) %>% 
   select(Country, 
-         Doctors_and_Graduates_per_1000,
-         Value) %>% 
-  filter(Value != "NA") %>% 
-  filter(Doctors_and_Graduates_per_1000 != "NA") %>% 
-  group_by(Country) %>% 
+         mean_Doctors_and_Graduates_per_1000,
+         mean_Value) %>% 
+  filter(mean_Value != "NA") %>% 
+  filter(mean_Doctors_and_Graduates_per_1000 != "NA") %>% 
   select(c(1,2,3)) %>% 
   knitr::kable(caption = "Hip Replacements waiting time against total doctors and medical graduates in 2020", digits = c(0, 1, 0),
                col.names = c("Country",
                              "Doctors & Medical Graduates per 1000",
                              "Waiting times for Hip Procedures Mean days")) %>%
   kable_classic_2()
-
-
-
+```
 
 
 
